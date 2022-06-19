@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".fragment.Incomefragment"
     android:background="#F3F1EF">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TOTAL EXPENSES"
+        android:textColor="#BA4578"
+        android:id="@+id/total_income"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="40dp"/>
 
    <LinearLayout
        android:layout_width="match_parent"

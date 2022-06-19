@@ -19,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.red)));
-        tabLayout =findViewById(R.id.tablayout );
-        viewPager2=findViewById(R.id.viewpager);
-        viewpageadapter=new viewpageadapter(this);
+        tabLayout = findViewById(R.id.tablayout);
+        viewPager2 = findViewById(R.id.viewpager);
+        viewpageadapter = new viewpageadapter(this);
         viewPager2.setAdapter(viewpageadapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

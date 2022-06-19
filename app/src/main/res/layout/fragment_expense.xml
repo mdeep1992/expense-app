@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     android:background="#F6F1F3"
     tools:context=".fragment.ExpenseFragment">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TOTAL EXPENSES:"
+        android:textColor="#C1A84E"
+        android:id="@+id/total_exp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="40dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -68,7 +78,7 @@
         android:id="@+id/add_expense_btn"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:backgroundTint="#D34646"/>
+        android:backgroundTint="#EC2626"/>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

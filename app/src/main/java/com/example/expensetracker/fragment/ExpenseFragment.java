@@ -1,5 +1,7 @@
 package com.example.expensetracker.fragment;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.icu.util.Calendar;
@@ -7,7 +9,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +19,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -36,13 +41,15 @@ import java.util.Random;
 
 public class ExpenseFragment extends Fragment {
     @SuppressLint("NewApi")
-    final Calendar myCalendar= Calendar.getInstance();
+    final Calendar myCalendar = Calendar.getInstance();
     List<Tracker> list;
     TrackerAdapter trackerAdapter;
     Button buttonexpense;
     EditText edit_exp_des;
     EditText edit_expense_amount;
     TextView date_expense;
+    TextView total_exp;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,42 +60,48 @@ public class ExpenseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        date_expense=view.findViewById(R.id.date_expense_pic);
-list=new ArrayList<>();
-        edit_expense_amount=view.findViewById(R.id.edit_txt_expense_amount);
-        edit_exp_des=view.findViewById(R.id.edit_text_exp);
-buttonexpense=view.findViewById(R.id.add_expense_btn);
-buttonexpense.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        String description=edit_exp_des.getText().toString();
-        String amount= (edit_expense_amount.getText().toString());;
-        String date=date_expense.getText().toString();
-        if (TextUtils.isEmpty(edit_exp_des.getText().toString())){
-            Toast.makeText(getActivity(),"Enter description",Toast.LENGTH_LONG).show();
-        }else if (TextUtils.isEmpty(amount)){
-Toast.makeText(getActivity(),"Enter the amount",Toast.LENGTH_LONG).show();
-        }  else if ( date.equalsIgnoreCase("Select a date")){
-            Toast.makeText(getActivity(),"Select a date",Toast.LENGTH_LONG).show();
-        }else {
-        Tracker tracker=new Tracker(description,date,Long.parseLong(amount),false);
-insertTracker(tracker);}
-    }
-});
+        date_expense = view.findViewById(R.id.date_expense_pic);
+        list = new ArrayList<>();
+        edit_expense_amount = view.findViewById(R.id.edit_txt_expense_amount);
+        edit_exp_des = view.findViewById(R.id.edit_text_exp);
+        total_exp = view.findViewById(R.id.total_exp);
+        buttonexpense = view.findViewById(R.id.add_expense_btn);
+        buttonexpense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String description = edit_exp_des.getText().toString();
+                String amount = (edit_expense_amount.getText().toString());
+                ;
+                String date = date_expense.getText().toString();
+                hideKeybaord(view);
+                if (TextUtils.isEmpty(edit_exp_des.getText().toString())) {
+                    Toast.makeText(getActivity(), "Enter description", Toast.LENGTH_LONG).show();
+                } else if (TextUtils.isEmpty(amount)) {
+                    Toast.makeText(getActivity(), "Enter the amount", Toast.LENGTH_LONG).show();
+                } else if (date.equalsIgnoreCase("Select a date")) {
+                    Toast.makeText(getActivity(), "Select a date", Toast.LENGTH_LONG).show();
+                } else {
+                    Tracker tracker = new Tracker(description, date, Long.parseLong(amount), false);
+                    insertTracker(tracker);
+                    clearData();
+                    Toast.makeText(getActivity(), "Successfully Added", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
-        RecyclerView recyclerView =view.findViewById(R.id.recycler_expense);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_expense);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-         trackerAdapter = new TrackerAdapter( list);
+        trackerAdapter = new TrackerAdapter(list);
         recyclerView.setAdapter(trackerAdapter);
-setData();
-        DatePickerDialog.OnDateSetListener date =new DatePickerDialog.OnDateSetListener() {
+        setData();
+        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @SuppressLint("NewApi")
             @Override
 
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH,month);
-                myCalendar.set(Calendar.DAY_OF_MONTH,day);
+                myCalendar.set(Calendar.MONTH, month);
+                myCalendar.set(Calendar.DAY_OF_MONTH, day);
                 updateLabel();
             }
         };
@@ -97,46 +110,61 @@ setData();
             @SuppressLint("NewApi")
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(getActivity(),date,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(getActivity(), date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
 
             }
         });
     }
+
     @SuppressLint("NewApi")
-    private void updateLabel(){
-        String myFormat="dd/MM/yy";
-        SimpleDateFormat dateFormat=new SimpleDateFormat(myFormat, Locale.US);
+    private void updateLabel() {
+        String myFormat = "dd/MM/yy";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
         date_expense.setText(dateFormat.format(myCalendar.getTime()));
     }
-    public void setData(){
+
+    public void setData() {
         new Thread(runnable).start();
     }
-    Runnable runnable = new Runnable()
-    {
+
+    Runnable runnable = new Runnable() {
         @Override
-        public void run()
-        {
-            list= TrackerDatabase.getInstance(getActivity()).userDao().getExpenses();
- getActivity().runOnUiThread(new Runnable() {
-     @Override
-     public void run() {
-         trackerAdapter.setList(list);
-         trackerAdapter.notifyDataSetChanged();
-     }
- });
+        public void run() {
+            list = TrackerDatabase.getInstance(getActivity()).userDao().getExpenses();
+            int total = TrackerDatabase.getInstance(getActivity()).userDao().getSumOfExpense();
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    trackerAdapter.setList(list);
+                    total_exp.setText("TOTAL EXPENSES:RS." + total);
+                    trackerAdapter.notifyDataSetChanged();
+                }
+            });
         }
     };
-    private void insertTracker(Tracker tracker){
+
+    private void insertTracker(Tracker tracker) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                 TrackerDatabase.getInstance(getActivity()).userDao().InsertUser(tracker);
+                TrackerDatabase.getInstance(getActivity()).userDao().InsertUser(tracker);
 
                 setData();
             }
         }).start();
     }
 
+    private void clearData() {
+        edit_exp_des.setText("");
+        edit_expense_amount.setText("");
+        date_expense.setText("select a date");
+    }
+
+    private void hideKeybaord(View v) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+    }
 }
 

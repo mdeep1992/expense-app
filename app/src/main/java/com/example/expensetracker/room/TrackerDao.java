@@ -18,4 +18,9 @@ public interface TrackerDao {
     List<Tracker>getIncome();
     @Query("SELECT * FROM Tracker WHERE isIncome=0")
     List<Tracker>getExpenses();
+    @Query("SELECT SUM(amount) FROM Tracker WHERE isIncome=1")
+    int getSumOfIncome();
+    @Query("SELECT SUM(amount) FROM Tracker WHERE isIncome=0")
+    int getSumOfExpense();
+
 }

@@ -16,7 +16,7 @@ public class Tracker {
     private long amount;
     private boolean isIncome;
 
-    public Tracker( String description, String date, long amount, boolean isIncome) {
+    public Tracker(String description, String date, long amount, boolean isIncome) {
         this.description = description;
         this.date = date;
         this.amount = amount;
