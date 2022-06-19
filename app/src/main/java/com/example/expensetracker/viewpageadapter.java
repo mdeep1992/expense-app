@@ -18,9 +18,8 @@ public class viewpageadapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 0:
-                return new ExpenseFragment();
-            case 1:
                 return new Incomefragment();
+
             default:
                 return new ExpenseFragment();
 

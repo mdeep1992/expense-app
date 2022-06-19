@@ -10,16 +10,20 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:orientation="horizontal"
-       android:layout_marginTop="100dp">
+       android:layout_marginTop="80dp"
+       android:padding="10dp">
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="Description:"
-           android:textSize="40dp"
-           android:id="@+id/des_tx" />
+           android:textSize="30dp"
+           android:textColor="@color/black"
+           android:id="@+id/des_tx"
+           android:textStyle="bold"/>
        <EditText
            android:layout_width="match_parent"
-           android:layout_height="wrap_content" />
+           android:layout_height="wrap_content"
+           android:id="@+id/edit_tx_income_des"/>
 
    </LinearLayout>
 
@@ -27,17 +31,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:layout_marginTop="200dp">
+    android:padding="10dp"
+    android:layout_marginTop="140dp">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Amount:"
-        android:textSize="40dp"
+        android:textSize="30dp"
         android:id="@+id/amount"
-        />
+        android:textStyle="bold"
+        android:textColor="@color/black" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/edt_txt_income_amt"
+        android:inputType="number"
         />
 
 </LinearLayout>
@@ -47,16 +55,27 @@
         android:text="select a date"
         android:textSize="30sp"
         android:id="@+id/income_date_pic"
-        android:layout_marginTop="270dp"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_marginTop="210dp"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"/>
 
 
     <Button
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="330dp"
+        android:layout_marginTop="280dp"
         android:text="ADD"
-        android:backgroundTint="#8F8C8C"/>
+        android:id="@+id/add_income_btn"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:backgroundTint="#60D825"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="350dp"
+        android:id="@+id/recycler_income">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>

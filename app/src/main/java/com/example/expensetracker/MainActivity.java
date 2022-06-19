@@ -3,6 +3,7 @@ package com.example.expensetracker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.TableLayout;
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.red)));
         tabLayout =findViewById(R.id.tablayout );
         viewPager2=findViewById(R.id.viewpager);
         viewpageadapter=new viewpageadapter(this);
